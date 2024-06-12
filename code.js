@@ -16,32 +16,32 @@ var enemies = [asteroid3];
 var rocket ={x:150, y:230, w:50, h:100,s:7, img:"rocket"};
 var score = 0;
 // Functions to set up game
-drawBackground();
-
 function scrollBg(){
-   bg1.x+=bg1.s;
-   bg2.x+=bg2.s;
-   setPosition(bg1.img, bg1.x, bg1.y, bg1.w, bg1.h);
-   setPosition(bg2.img, bg2.x, bg2.y, bg2.w, bg2.h);
-   // find the wrap around the screen
-    if (bg1.x>320){
-     bg1.x=-319;
-   }
-   if (bg2.x>320){
-   bg2.x=-319;
-   }
- }
-
-function drawBackground(){
-  image(bg1.img, "6062b.png");
-  image(bg2.img, "6062a.png");
- 
-  setProperty(bg1.img, "fit", "cover");
-  setProperty(bg2.img, "fit", "cover");
-  
+  bg1.x+=bg1.s;
+  bg2.x+=bg2.s;
+  setPosition(bg1.img, bg1.x, bg1.y, bg1.w, bg1.h);
+  setPosition(bg2.img, bg2.x, bg2.y, bg2.w, bg2.h);
+  // find the wrap around the screen
+   if (bg1.x>320){
+    bg1.x=-319;
+  }
+  if (bg2.x>320){
+  bg2.x=-319;
+  }
 }
 
-setInterval
+function setPosition(el, x, y, w, h){
+	var element= document.getElementById(el);
+         element.style.position = 'absolute';
+					element.style.left = x + 'px';
+					element.style.top = y + 'px';
+					element.style.width = w + 'px';
+					element.style.height =h + 'px';
+
+}
+setInterval(function() {
+scrollBg();
+}, 100);
 
 //makeAsteroid();
 //makeRocket();
@@ -66,17 +66,17 @@ setInterval
 // });
 
 
-timedLoop(50, function (){
-  scrollBg();
-  moveAsteroid(asteroid1);
-  moveAsteroid(asteroid2);
-  moveAsteroid(asteroid3);
-  handleCollision(rocket, asteroids, false);
-    handleCollision(rocket, enemies, true);
-  checkOverlap(asteroid1);
-  checkOverlap(asteroid2);
-  checkOverlap(asteroid3);
-});
+// timedLoop(50, function (){
+//   scrollBg();
+//   moveAsteroid(asteroid1);
+//   moveAsteroid(asteroid2);
+//   moveAsteroid(asteroid3);
+//   handleCollision(rocket, asteroids, false);
+//     handleCollision(rocket, enemies, true);
+//   checkOverlap(asteroid1);
+//   checkOverlap(asteroid2);
+//   checkOverlap(asteroid3);
+// });
 // function handleCollision(item, objects, attack){
 //   var points=2
 //   if(attack==true ){
@@ -109,19 +109,7 @@ timedLoop(50, function (){
 //   setProperty("score", "border-width", 3);
 //   setProperty("score", "border-radius", 3);
 // }
-// function scrollBg(){
-//   bg1.x+=bg1.s;
-//   bg2.x+=bg2.s;
-//   setPosition(bg1.img, bg1.x, bg1.y, bg1.w, bg1.h);
-//   setPosition(bg2.img, bg2.x, bg2.y, bg2.w, bg2.h);
-//   // find the wrap around the screen
-//    if (bg1.x>320){
-//     bg1.x=-319;
-//   }
-//   if (bg2.x>320){
-//   bg2.x=-319;
-//   }
-// }
+
 
 // function makeAsteroid(){
 //     image(asteroid1.img, "meteor.png");
