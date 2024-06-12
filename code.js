@@ -6,136 +6,163 @@
  */
 
 // Initialize variables
-var bg1={x:0, y:0, w:320, h:450, s:2, img:"bg1"};
-var bg2={x:-320, y:0, w:320, h:450, s:2, img:"bg2"};
-var ast1={x:randomNumber(0,320), y:-10, w:50, h:50, s:2, img:"ast1"};
-var ast2={x:randomNumber(0,320), y:-10, w:50, h:50, s:2, img:"ast2"};
-var ast3={x:randomNumber(0,320), y:-10, w:50, h:50, s:2, img:"ast3"};
-var rkt={x:randomNumber(0,320), y:360, w:50, h:100, s:2, img:"rkt"};
-var score=0;
-var maxScore=30;
-
+var bg1 ={x:0, y: 0, w:323, h:450, s:2, img:"bg1"};
+var bg2 ={x:320, y: 0, w:323, h:450, s:2, img:"bg2"};
+var asteroid1 ={x:100, y:-20, w:50, h:50, s:2, img:"asteroid1"};
+var asteroid2 ={x:200, y:-20, w:50, h:50, s:2, img:"asteroid2"};
+var asteroid3 ={x:300, y:-10, w:50, h:50, s:2, img:"asteroid3"};
+var asteroids = [asteroid1, asteroid2];
+var enemies = [asteroid3];
+var rocket ={x:150, y:230, w:50, h:100,s:7, img:"rocket"};
+var score = 0;
+// Functions to set up game
 drawBackground();
 
-
-
-timedLoop(100, scrollBg);
-
-function drawBackground(){
-  image(bg1.img, "assets/6062b.png");
-  image(bg2.img, "assets/6062a.png");
-  textLabel('score', "Score: " + score);
-  setPosition("score", 10, 10, 100, 25);
-  setProperty(bg1.img,"fit", "cover");
-  setProperty(bg2.img,"fit", "cover");
-  
-}
-
-
-
 function scrollBg(){
-  bg1.x+=bg1.s;
-  bg2.x+=bg2.s;
-setPosition(bg1.img, bg1.x, bg1.y, bg1.w, bg1.h);
-setPosition(bg2.img, bg2.x, bg2.y, bg2.w, bg2.h);
-}
-
-drawAsteroids();
-function drawAsteroids(){
-  image(ast1.img, "assets/meteor.png");
-  image(ast2.img, "assets/meteor2.png");
-  image(ast3.img, "assets/rock.png");
-  setPosition(ast1.img, ast1.x, ast1.y, ast1.w, ast1.h);
-  setPosition(ast2.img, ast2.x, ast2.y, ast2.w, ast2.h);
-  setPosition(ast3.img, ast3.x, ast3.y, ast3.w, ast3.h);
-
-}
-
-drawRocket();
-function drawRocket(){
-  image(rkt.img, "assets/rocket.gif");
-  setPosition(rkt.img, rkt.x, rkt.y, rkt.w, rkt.h);
-}
-
-timedLoop(100, moveAsteroids);
-function moveAsteroids(){
-        ast1.y = ast1.y + ast1.s;
-        ast2.y = ast2.y + ast2.s;
-        ast3.y = ast3.y + ast3.s;
-  setPosition("ast1", ast1.x, ast1.y, 50, 50);
-        setPosition("ast2", ast2.x, ast2.y, 50, 50);
-         setPosition("ast3", ast3.x, ast3.y, 50, 50);
-         
-  checkCollision(rkt, ast1);
-
-checkCollision(rkt, ast2);
-
-checkCollision(rkt, ast3);
-
-reachBottom(ast1);
-reachBottom(ast2);
-reachBottom(ast3);
-}
-
-function bounce(){
-  for(var i = 0; i < 4; i++){
-    if (ball.x>320 || ball.x<=0 ){
-    ball.speedX=-ball.speedX;
-  }
-  if(ball.y>450 || ball.y<=0){
-    ball.speedY=-ball.speedY;
-  }
-  }
-}
-
-
- function checkCollision(obj1, obj2){
- var xOv=Math.max(0, Math.min(obj1.x+obj1.w, obj2.x+obj2.w)-Math.max(obj1.x,obj2.x)+1)>0 ;
-  var yOv=Math.max(0, Math.min(obj1.y+obj1.h, obj2.y+obj2.h)-Math.max(obj1.y,obj2.y)+1)>0 ;
- if (xOv>0 && yOv>0){
-   startOver(obj2);
-   score=score+2;
-   setText("score", "Score: "+ score);
-if (score>=maxScore){
-stopTimedLoop();
-} 
-}
-}
-  
-  
-function startOver(obj1){
-            obj1.y = randomNumber(-50,-20);
-            obj1.x = randomNumber(10,300);
-            obj1.s = randomNumber(3,8);
-            setPosition(obj1.img, obj1.x, obj1.y, obj1.w, obj1.h);
-  
- }
- 
-
-
- function reachBottom(obj1){
-   if (obj1.y>=450){
-     startOver(obj1);
-     score=score-1;
-     setText("score", "Score: "+score);
+   bg1.x+=bg1.s;
+   bg2.x+=bg2.s;
+   setPosition(bg1.img, bg1.x, bg1.y, bg1.w, bg1.h);
+   setPosition(bg2.img, bg2.x, bg2.y, bg2.w, bg2.h);
+   // find the wrap around the screen
+    if (bg1.x>320){
+     bg1.x=-319;
+   }
+   if (bg2.x>320){
+   bg2.x=-319;
    }
  }
+
+function drawBackground(){
+  image(bg1.img, "6062b.png");
+  image(bg2.img, "6062a.png");
  
- onEvent("screen1", "keydown", function(event) {
-    if (event.key === "Left") {
-        rkt.x = rkt.x - rkt.s; 
-    }
-    if (event.key === "Right") {
-        rkt.x = rkt.x + rkt.s; 
-    }
-    if (event.key === "Down") {
-        rkt.y = rkt.y + rkt.s; 
-    }
-    if (event.key === "Up") {
-        rkt.y = rkt.y - rkt.s; 
-    }
-    setPosition("rkt", rkt.x, rkt.y, rkt.w, rkt.h);
-   
- });
+  setProperty(bg1.img, "fit", "cover");
+  setProperty(bg2.img, "fit", "cover");
+  
+}
+
+setInterval
+
+//makeAsteroid();
+//makeRocket();
+//drawScore();
+
+
+// onEvent("screen1", "keydown", function (event) {
+//   if (event.key=="Left"){
+//     rocket.x -= rocket.s; // Move the rocket left
+//   }
+//   if (event.key=="Right"){
+//     rocket.x +=rocket.s; // Move the rocket right
+//   }
+//   if (event.key=="Up"){
+//     rocket.y -= rocket.s; // Move the rocket up
+//   }
+//   if (event.key==="Down"){
+//     rocket.y += rocket.s; // Move the rocket down
+//   }
+
+// setPosition(rocket.img,rocket.x,rocket.y,rocket.w,rocket.h);
+// });
+
+
+timedLoop(50, function (){
+  scrollBg();
+  moveAsteroid(asteroid1);
+  moveAsteroid(asteroid2);
+  moveAsteroid(asteroid3);
+  handleCollision(rocket, asteroids, false);
+    handleCollision(rocket, enemies, true);
+  checkOverlap(asteroid1);
+  checkOverlap(asteroid2);
+  checkOverlap(asteroid3);
+});
+// function handleCollision(item, objects, attack){
+//   var points=2
+//   if(attack==true ){
+//     points=-3;
+    
+//   }
+//   for (var i = 0; i<objects.length; i++){
+//     if (checkCollision(item,objects[i])){
+//        objects[i].y = -90;
+//   objects[i].x = randomNumber(15,290);
+//   objects[i].s = randomNumber(3,6);
+//   setPosition(objects[i].img, objects[i].x, objects[i].y);
+//   score=score+=points;
+//   setText("score", "Score: "+score);
+//   if (score>= 20){
+//     stopTimedLoop();
+//   }
+    
+    
+//   }
+//   }
+  
+// }
+
+// function drawScore (){
+//   textLabel ("score", "Score: ");
+//   setPosition ("score", 190, 25, 105, 25);
+//   setProperty("score", "text-color", "blue");
+//   setProperty("score", "border-color","blue");
+//   setProperty("score", "border-width", 3);
+//   setProperty("score", "border-radius", 3);
+// }
+// function scrollBg(){
+//   bg1.x+=bg1.s;
+//   bg2.x+=bg2.s;
+//   setPosition(bg1.img, bg1.x, bg1.y, bg1.w, bg1.h);
+//   setPosition(bg2.img, bg2.x, bg2.y, bg2.w, bg2.h);
+//   // find the wrap around the screen
+//    if (bg1.x>320){
+//     bg1.x=-319;
+//   }
+//   if (bg2.x>320){
+//   bg2.x=-319;
+//   }
+// }
+
+// function makeAsteroid(){
+//     image(asteroid1.img, "meteor.png");
+//     setProperty(asteroid1.img, "fit", "fill");
+//     setPosition(asteroid1.img, asteroid1.x, asteroid1.y, asteroid1.w, asteroid1.h);
+//     // draw asteroid2
+//     image(asteroid2.img, "meteor2.png");
+//     setProperty(asteroid2.img, "fit", "fill");
+//     setPosition(asteroid2.img, asteroid2.x, asteroid2.y, asteroid2.w, asteroid2.h);
+//     //draw asteroid3
+//     image(asteroid3.img, "rock.png");
+//     setProperty(asteroid1.img, "fit", "fill");
+//     setPosition(asteroid3.img, asteroid3.x, asteroid3.y, asteroid3.w, asteroid3.h);
+    
+// }
+// function moveAsteroid (asteroid){
+//   asteroid.y += asteroid.s;
+//   setPosition(asteroid.img,asteroid.x,asteroid.y);
+// }
+
+// function makeRocket (){
+//     image(rocket.img, "rocket.gif");
+//     setPosition(rocket.img, rocket.x, rocket.y, rocket.w, rocket.h);
+// }
+
+// function checkCollision (obj1, obj2){
+// // console.log (typeof(obj1)!=typeof(obj2));
+// var xOv= Math.max(0,Math.min(obj1.x+obj1.w, obj2.x+obj2.w)-Math.max(obj1.x,obj2.x)+1);
+// var yOv= Math.max(0,Math.min(obj1.y+obj1.h, obj2.y+obj2.h)-Math.max(obj1.y,obj1.y)+1);
+// return xOv>0 && yOv>0 ;
  
- 
+
+// }
+// function checkOverlap (asteroid) {
+//   if (asteroid.y >= 450) {
+//     asteroid.y = -100;
+//     asteroid.x = randomNumber(20,300);
+//     asteroid.s = randomNumber(4,6);
+//     setPosition(asteroid.img, asteroid.x, asteroid.y);
+//     score=score-=1;
+//    setText("score", "Score: "+score)
+    
+//   }
+// }
